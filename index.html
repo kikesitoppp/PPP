@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de WhatsApp Web</title>
+    <style>
+        body {
+            background-color: #ffccff;
+            font-family: Arial, sans-serif;
+            color: #000;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .display-item {
+            position: relative;
+            width: 80%;
+            max-width: 400px;
+            max-height: 80vh;
+            margin: auto;
+            border-radius: 10px;
+            background-color: #fff;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        img, video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 10px;
+            display: none; /* Ocultar inicialmente */
+        }
+        .caption {
+            font-size: 1.2rem;
+            color: #000;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            width: 90%;
+            text-align: center;
+            z-index: 1;
+        }
+        .nav-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-button.left {
+            left: 10px;
+        }
+        .nav-button.right {
+            right: 10px;
+        }
+        .play-message-button {
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            background-color: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="displayContainer" class="display-item">
+        <p id="caption" class="caption"></p>
+        <img id="displayImage" src="" alt="">
+        <video id="displayVideo" muted autoplay playsinline></video>
+    </div>
+
+    <!-- Botones de navegación en forma de corazón -->
+    <button id="prevButton" class="nav-button left">❮</button>
+    <button id="nextButton" class="nav-button right">❯</button>
+
+    <!-- Botón para reproducir mensaje personalizado -->
+    <button id="playMessageButton" onclick="playAudio()" class="play-message-button">Reproducir Mi Mensaje</button>
+
+    <audio id="audioMessage">
+        <source src="audio/mensaje1.mp3" type="audio/mp3">
+        Tu navegador no soporta el audio HTML5.
+    </audio>
+
+    <script>
+        const displayImage = document.getElementById('displayImage');
+        const displayVideo = document.getElementById('displayVideo');
+        const caption = document.getElementById('caption');
+        const playMessageButton = document.getElementById('playMessageButton');
+        
+        const content = [
+            { type: 'image', src: 'fotos/foto1.jpeg', caption: 'Hola mi amor ❤️' },
+            { type: 'image', src: 'fotos/foto2.jpeg', caption: 'Mi niña preciosa' },
+            { type: 'image', src: 'fotos/foto3.jpeg', caption: 'Sabes que me encantas?' },
+            { type: 'video', src: 'fotos/video1.mp4', caption: 'Hoy es un día muy importante...' },
+            { type: 'video', src: 'fotos/video2.mp4', caption: 'Es el cumpleaños de la niña más hermosa de este planeta 🥺' },
+            { type: 'image', src: 'fotos/foto4.jpeg', caption: 'Primeramente desearte un hermoso día, así cómo tú:' },
+            { type: 'image', src: 'fotos/foto5.jpeg', caption: 'Por segundo quiero hacerte acuerdo de lo importante que eres para mí' },
+            { type: 'image', src: 'fotos/foto6.jpeg', caption: 'Y de lo mucho que te amo ❤️' },
+            { type: 'video', src: 'fotos/video3.mp4', caption: 'Eres la persona con la que toda una vida quiero estar...' },
+            { type: 'video', src: 'fotos/video4.mp4', caption: 'Para mí eres perfecta en todo aspecto 🥺' },
+            { type: 'image', src: 'fotos/foto7.jpeg', caption: 'Quiero agradecerte por seguir estando conmigo a pesar de todo' },
+            { type: 'image', src: 'fotos/foto8.jpeg', caption: 'Créeme que yo nunca te dejaré sóla...' },
+            { type: 'image', src: 'fotos/foto9.jpeg', caption: 'Estaré para tí en las buenas y en las malas' },
+            { type: 'video', src: 'fotos/video5.mp4', caption: 'Caminaré contigo hasta el fin del mundo 🌍' },
+            { type: 'image', src: 'fotos/foto10.jpeg', caption: 'Y estaré pendiente para que nunca...' },
+            { type: 'image', src: 'fotos/foto11.jpeg', caption: 'NUNCAAAAA...' },
+            { type: 'image', src: 'fotos/foto12.jpeg', caption: 'PERO NUNCA NUNCA...' },
+            { type: 'image', src: 'fotos/foto13.jpeg', caption: 'NUNCA DE LOS JAMASESSS...' },
+            { type: 'image', src: 'fotos/foto14.jpeg', caption: '... NOS SOLTEMOS 🥺' },
+            { type: 'image', src: 'fotos/foto15.jpeg', caption: 'Estaré siempre contigo mi amor' },
+            { type: 'video', src: 'fotos/video6.mp4', caption: 'Y tú estarás siempre conmigo...' },
+            { type: 'image', src: 'fotos/foto17.jpeg', caption: 'CON MUCHO AMOR, TU GORDITO 🥺' },
+            { type: 'video', src: 'fotos/video7.mp4', caption: 'Psdt: Soy la tierra dando vueltas en mi sol 🥺' }
+        ];
+
+        let currentIndex = 0;
+
+        function showContent(index) {
+            displayImage.style.display = 'none';
+            displayVideo.style.display = 'none';
+            displayVideo.pause();
+            caption.textContent = '';
+
+            if (index >= content.length) {
+                playMessageButton.style.display = 'block';
+                return;
+            } else {
+                playMessageButton.style.display = 'none';
+            }
+
+            const item = content[index];
+            caption.textContent = item.caption;
+
+            if (item.type === 'image') {
+                displayImage.src = item.src;
+                displayImage.style.display = 'block';
+            } else if (item.type === 'video') {
+                displayVideo.src = item.src;
+                displayVideo.style.display = 'block';
+                displayVideo.play();
+            }
+        }
+
+        function nextContent() {
+            currentIndex = (currentIndex + 1) % (content.length + 1);
+            showContent(currentIndex);
+        }
+
+        function prevContent() {
+            currentIndex = (currentIndex - 1 + content.length + 1) % (content.length + 1);
+            showContent(currentIndex);
+        }
+
+        function playAudio() {
+            document.getElementById('audioMessage').play();
+        }
+
+        document.getElementById('prevButton').addEventListener('click', prevContent);
+        document.getElementById('nextButton').addEventListener('click', nextContent);
+
+        showContent(currentIndex);
+    </script>
+</body>
+</html>
