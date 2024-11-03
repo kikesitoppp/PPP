@@ -18,6 +18,13 @@
             flex-direction: column;
             overflow: hidden;
         }
+        .heart-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
         .display-item {
             position: relative;
             width: 80%;
@@ -28,6 +35,7 @@
             background-color: #fff;
             overflow: hidden;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1;
         }
         img, video {
             width: 100%;
@@ -48,7 +56,7 @@
             border-radius: 5px;
             width: 90%;
             text-align: center;
-            z-index: 1;
+            z-index: 2;
         }
         .nav-button {
             position: absolute;
@@ -83,14 +91,41 @@
             margin-top: 10px;
             display: none;
         }
+
+        /* Estilo para los corazones */
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            color: #ff69b4;
+        }
+        .heart-top-left { top: -30px; left: 20%; }
+        .heart-top { top: -30px; left: 50%; transform: translateX(-50%); }
+        .heart-top-right { top: -30px; right: 20%; }
+        .heart-left { top: 50%; left: -30px; transform: translateY(-50%); }
+        .heart-right { top: 50%; right: -30px; transform: translateY(-50%); }
+        .heart-bottom-left { bottom: -30px; left: 10%; }
+        .heart-bottom-right { bottom: -30px; right: 10%; }
+
     </style>
 </head>
 <body>
 
-    <div id="displayContainer" class="display-item">
-        <p id="caption" class="caption"></p>
-        <img id="displayImage" src="" alt="">
-        <video id="displayVideo" muted autoplay playsinline></video>
+    <div class="heart-container">
+        <!-- Corazones decorativos -->
+        <span class="heart heart-top-left">❤️</span>
+        <span class="heart heart-top">❤️</span>
+        <span class="heart heart-top-right">❤️</span>
+        <span class="heart heart-left">❤️</span>
+        <span class="heart heart-right">❤️</span>
+        <span class="heart heart-bottom-left">❤️</span>
+        <span class="heart heart-bottom-right">❤️</span>
+        
+        <!-- Contenedor de la galería -->
+        <div id="displayContainer" class="display-item">
+            <p id="caption" class="caption"></p>
+            <img id="displayImage" src="" alt="">
+            <video id="displayVideo" muted autoplay playsinline></video>
+        </div>
     </div>
 
     <!-- Botones de navegación en forma de corazón -->
