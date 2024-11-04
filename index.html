@@ -42,7 +42,7 @@
             height: 100%;
             object-fit: contain;
             border-radius: 10px;
-            display: none; /* Ocultar inicialmente */
+            display: none;
         }
         .caption {
             font-size: 1.2rem;
@@ -92,7 +92,6 @@
             display: none;
         }
 
-        /* Estilo para los corazones */
         .heart {
             position: absolute;
             font-size: 1.5rem;
@@ -111,7 +110,6 @@
 <body>
 
     <div class="heart-container">
-        <!-- Corazones decorativos -->
         <span class="heart heart-top-left">❤️</span>
         <span class="heart heart-top">❤️</span>
         <span class="heart heart-top-right">❤️</span>
@@ -120,7 +118,6 @@
         <span class="heart heart-bottom-left">❤️</span>
         <span class="heart heart-bottom-right">❤️</span>
         
-        <!-- Contenedor de la galería -->
         <div id="displayContainer" class="display-item">
             <p id="caption" class="caption"></p>
             <img id="displayImage" src="" alt="">
@@ -128,15 +125,19 @@
         </div>
     </div>
 
-    <!-- Botones de navegación en forma de corazón -->
     <button id="prevButton" class="nav-button left">❮</button>
     <button id="nextButton" class="nav-button right">❯</button>
 
-    <!-- Botón para reproducir mensaje personalizado -->
     <button id="playMessageButton" onclick="playAudio()" class="play-message-button">Reproducir Mi Mensaje</button>
 
     <audio id="audioMessage">
         <source src="fotos/mensaje1.mp3" type="audio/mp3">
+        Tu navegador no soporta el audio HTML5.
+    </audio>
+
+    <!-- Música de fondo -->
+    <audio id="backgroundMusic" autoplay loop>
+        <source src="fotos/cancion_de_fondo.mp3" type="audio/mp3">
         Tu navegador no soporta el audio HTML5.
     </audio>
 
@@ -145,7 +146,8 @@
         const displayVideo = document.getElementById('displayVideo');
         const caption = document.getElementById('caption');
         const playMessageButton = document.getElementById('playMessageButton');
-        
+        const backgroundMusic = document.getElementById('backgroundMusic');
+
         const content = [
             { type: 'image', src: 'fotos/foto1.jpeg', caption: 'Hola mi amor ❤️' },
             { type: 'image', src: 'fotos/foto2.jpeg', caption: 'Mi niña preciosa' },
@@ -201,21 +203,30 @@
         }
 
         function nextContent() {
-            currentIndex = (currentIndex + 1) % (content.length + 1);
+            currentIndex = (currentIndex + 1) % content.length;
             showContent(currentIndex);
         }
 
         function prevContent() {
-            currentIndex = (currentIndex - 1 + content.length + 1) % (content.length + 1);
+            currentIndex = (currentIndex - 1 + content.length) % content.length;
             showContent(currentIndex);
         }
 
-        function playAudio() {
-            document.getElementById('audioMessage').play();
-        }
-
-        document.getElementById('prevButton').addEventListener('click', prevContent);
         document.getElementById('nextButton').addEventListener('click', nextContent);
+        document.getElementById('prevButton').addEventListener('click', prevContent);
+
+        function playAudio() {
+            const audioMessage = document.getElementById('audioMessage');
+            if (backgroundMusic) {
+                backgroundMusic.pause(); // Pausar música de fondo
+            }
+            audioMessage.play();
+            audioMessage.onended = () => {
+                if (backgroundMusic) {
+                    backgroundMusic.play(); // Reanudar música de fondo al finalizar el mensaje
+                }
+            };
+        }
 
         showContent(currentIndex);
     </script>
